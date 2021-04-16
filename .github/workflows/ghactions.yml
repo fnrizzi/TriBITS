@@ -1,0 +1,66 @@
+
+name: Github Actions for TriBITS
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# for the master and develop branch 
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        python-version: [3.7]
+        cxx-compilers: [g++-9]
+
+    steps:
+    - uses: actions/checkout@v1
+
+    # - name: Set up Python
+    #   uses: actions/setup-python@v2
+    #   with:
+    #     python-version: ${{ matrix.python-version }}
+
+    - name: Creating environnement...
+      run: |
+        echo $(pwd)
+        cd ..
+        PARENT_DIR=$(pwd)
+        echo "WORKSPACE_PARENT_DIR=$PARENT_DIR" >> $GITHUB_ENV
+        echo "BUILD_DIR=$PARENT_DIR/build" >> $GITHUB_ENV
+        sudo apt-get update
+        ${{ matrix.config.requirements }}
+
+    - name: Build
+      env:
+        CXX: ${{matrix.cxx-compilers}}
+      run: |
+        echo "Compilers:"
+        echo $CXX
+    # echo "WORKSPACE_PARENT_DIR=$PARENT_DIR" >> $GITHUB_ENV
+        echo ${{ env.WORKSPACE_PARENT_DIR }}
+
+    #     PARENT_DIR=$(pwd)
+    #     echo "WORKSPACE_PARENT_DIR=$PARENT_DIR" >> $GITHUB_ENV
+
+    #     mkdir build && cd build
+    #     cmake \
+    #     -D TPL_ENABLE_MPI=OFF \
+    #     -D CMAKE_C_COMPILER=$CC \
+    #     -D TriBITS_ENABLE_Fortran=ON \
+    #     -D TriBITS_ENABLE_TESTS=ON \
+    #     ${{ env.WORKSPACE_PARENT_DIR }}
+
+    #     python setup.py build
+
+    # - name: Run CTest
+    #   run: |
+    #     cd ${{ matrix.config.ctest_build }}
+    #     export LD_LIBRARY_PATH=${{ env.PRESSIO_BUILDS }}/trilinos/install/lib
+    #     ctest -V
