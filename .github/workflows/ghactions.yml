@@ -13,41 +13,34 @@ on:
 jobs:
   build:
 
-    # strategy:
-    # matrix:
-    #   os: [ubuntu-latest, ubuntu-20.04]
-    #   python-version: [3.7]
-    #   compilers: [[g++-8, gcc-8, gfortran-8], [g++-9, gcc-9, gfortran-9]]
-
     strategy:
       matrix:
         config:
-        - { name: ubuntu_gnu9,  os: ubuntu-latest, cc: gcc-9,  cxx: g++-9,  fc: gfortran-9}
-        # - { name: ubuntu_gnu10, os: ubuntu-latest, cc: gcc-10, cxx: g++-10, fc: gfortran-10}
+        - { name: ubuntu_gnu9,  os: ubuntu-latest, cc: gcc-9,  cxx: g++-9,  fc: gfortran-9,  py: "3.8"}
+        - { name: ubuntu_gnu10, os: ubuntu-latest, cc: gcc-10, cxx: g++-10, fc: gfortran-10, py: "3.8"}
 
     runs-on: ${{ matrix.config.os }}
 
     steps:
     - uses: actions/checkout@v1
 
-    # - name: Set up Python
-    #   uses: actions/setup-python@v2
-    #   with:
-    #     python-version: ${{ matrix.python-version }}
-
-    - name: Update environnement...
+    - name: Update OS environnement
       run: |
         sudo apt-get update
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
 
     - name: get-cmake
       uses: lukka/get-cmake@v3.20.1
 
-    - name: Setup env vars...
+    - name: Setup env vars
       run: |
         echo "SRC_DIR=$(pwd)" >> $GITHUB_ENV
         echo "BUILD_DIR=$(pwd)/../build" >> $GITHUB_ENV
         ${{ matrix.config.requirements }}
-        cmake --version
 
     - name: Configure
       env:
