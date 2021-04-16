@@ -37,7 +37,7 @@ jobs:
     - name: Setup env vars...
       run: |
         echo "SRC_DIR=$(pwd)/TriBITS" >> $GITHUB_ENV
-        echo "BUILD_DIR=$(pwd)build" >> $GITHUB_ENV
+        echo "BUILD_DIR=$(pwd)/build" >> $GITHUB_ENV
         ${{ matrix.config.requirements }}
 
     - name: Build
