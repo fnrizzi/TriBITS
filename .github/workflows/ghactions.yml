@@ -13,11 +13,18 @@ on:
 jobs:
   build:
 
+    # strategy:
+    # matrix:
+    #   os: [ubuntu-latest, ubuntu-20.04]
+    #   python-version: [3.7]
+    #   compilers: [[g++-8, gcc-8, gfortran-8], [g++-9, gcc-9, gfortran-9]]
+
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-20.04]
-        python-version: [3.7]
-        cxx-compilers: [g++-9]
+        cfg:
+        - { name: ubuntu_gnu8, os: ubuntu-latest, name: GNU, cc: gcc-8, cxx: g++-8, fc: gfortran-8}
+        - { name: ubuntu_gnu8, os: ubuntu-latest, name: GNU, cc: gcc-9, cxx: g++-9, fc: gfortran-9}
+
 
     # runs-on: ubuntu-20.04
     runs-on: ${{ matrix.os }}
@@ -42,18 +49,20 @@ jobs:
 
     - name: Build
       env:
-        CXX: ${{matrix.cxx-compilers}}
+        CC: ${{ matrix.config.cc }}
+        CXX: ${{ matrix.config.cxx }}
+        FC: ${{ matrix.config.fc }}
 
       run: |
-        echo "Compilers:"
-        echo $CXX
         echo ${{ env.BUILD_DIR }}
+        echo "Compilers:"
+        $CC --version
 
-    #     mkdir ${{ env.BUILD_DIR }} 
-    #     cd ${{ env.BUILD_DIR }}
-    #     cmake \
-    #     -D TPL_ENABLE_MPI=OFF \
-    #     -D CMAKE_C_COMPILER=$CC \
-    #     -D TriBITS_ENABLE_Fortran=ON \
-    #     -D TriBITS_ENABLE_TESTS=ON \
-    #     ${{ env.WORKSPACE_PARENT_DIR }}/TriBITS
+      #   mkdir ${{ env.BUILD_DIR }} 
+      #   cd ${{ env.BUILD_DIR }}
+      #   cmake \
+      #   -D TPL_ENABLE_MPI=OFF \
+      #   -D CMAKE_C_COMPILER=gcc \
+      #   -D TriBITS_ENABLE_Fortran=ON \
+      #   -D TriBITS_ENABLE_TESTS=ON \
+      #   ${{ env.SRC_DIR }}
