@@ -13,10 +13,11 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    # runs-on: ubuntu-20.04
 
     strategy:
       matrix:
+        os: [ubuntu-latest, ubuntu-20.04]
         python-version: [3.7]
         cxx-compilers: [g++-9]
 
@@ -32,22 +33,20 @@ jobs:
       run: |
         sudo apt-get update
 
-    - name: Setup environnement...
+    - name: Setup env vars...
       run: |
-        PARENT_DIR=$(pwd)/..
-        echo "WORKSPACE_PARENT_DIR=$PARENT_DIR" >> $GITHUB_ENV
-        echo "SRC_DIR=${PARENT_DIR}/TriBITS" >> $GITHUB_ENV
-        echo "BUILD_DIR=$PARENT_DIR/build" >> $GITHUB_ENV
+        echo "SRC_DIR=${pwd}/TriBITS" >> $GITHUB_ENV
+        echo "BUILD_DIR=${pwd)build" >> $GITHUB_ENV
         ${{ matrix.config.requirements }}
-        ls $(pwd) 
-    # - name: Build
-    #   env:
-    #     CXX: ${{matrix.cxx-compilers}}
 
-    #   run: |
-    #     echo "Compilers:"
-    #     echo $CXX
-    #     echo ${{ env.WORKSPACE_PARENT_DIR }}
+    - name: Build
+      env:
+        CXX: ${{matrix.cxx-compilers}}
+
+      run: |
+        echo "Compilers:"
+        echo $CXX
+        echo ${{ env.BUILD_DIR }}
 
     #     mkdir ${{ env.BUILD_DIR }} 
     #     cd ${{ env.BUILD_DIR }}
