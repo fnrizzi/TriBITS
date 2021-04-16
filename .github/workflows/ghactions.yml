@@ -39,8 +39,7 @@ jobs:
         echo "SRC_DIR=${PARENT_DIR}/TriBITS" >> $GITHUB_ENV
         echo "BUILD_DIR=$PARENT_DIR/build" >> $GITHUB_ENV
         ${{ matrix.config.requirements }}
-        ls ${{ env.WORKSPACE_PARENT_DIR }}/TriBITS
-
+        ls $(pwd) 
     # - name: Build
     #   env:
     #     CXX: ${{matrix.cxx-compilers}}
