@@ -23,7 +23,7 @@ jobs:
       matrix:
         config:
         - { name: ubuntu_gnu9,  os: ubuntu-latest, cc: gcc-9,  cxx: g++-9,  fc: gfortran-9}
-        - { name: ubuntu_gnu10, os: ubuntu-latest, cc: gcc-10, cxx: g++-10, fc: gfortran-10}
+        # - { name: ubuntu_gnu10, os: ubuntu-latest, cc: gcc-10, cxx: g++-10, fc: gfortran-10}
 
     runs-on: ${{ matrix.config.os }}
 
@@ -45,7 +45,7 @@ jobs:
         echo "BUILD_DIR=$(pwd)/../build" >> $GITHUB_ENV
         ${{ matrix.config.requirements }}
 
-    - name: Build
+    - name: Configure
       env:
         CC: ${{ matrix.config.cc }}
         CXX: ${{ matrix.config.cxx }}
@@ -61,6 +61,13 @@ jobs:
         cmake \
          -D TPL_ENABLE_MPI=OFF \
          -D CMAKE_C_COMPILER=gcc \
+         -D CMAKE_CXX_COMPILER=g++ \
+         -D CMAKE_FC_COMPILER=gfortran \
          -D TriBITS_ENABLE_Fortran=ON \
          -D TriBITS_ENABLE_TESTS=ON \
          ${{ env.SRC_DIR }}
+
+    - name: Build
+      run: |
+        cd ${{ env.BUILD_DIR }}
+        make -j4
