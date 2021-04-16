@@ -39,6 +39,11 @@ jobs:
       run: |
         sudo apt-get update
 
+    - name: get-cmake
+      uses: lukka/get-cmake@v3.20.1
+      run: |
+        cmake --version
+
     - name: Setup env vars...
       run: |
         echo "SRC_DIR=$(pwd)" >> $GITHUB_ENV
