@@ -26,7 +26,7 @@ jobs:
         - { name: ubuntu_gnu9, os: ubuntu-latest, cc: gcc-9, cxx: g++-9, fc: gfortran-9}
 
     # runs-on: ubuntu-20.04
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.config.os }}
 
     steps:
     - uses: actions/checkout@v1
