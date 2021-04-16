@@ -43,24 +43,4 @@ jobs:
       run: |
         echo "Compilers:"
         echo $CXX
-    # echo "WORKSPACE_PARENT_DIR=$PARENT_DIR" >> $GITHUB_ENV
         echo ${{ env.WORKSPACE_PARENT_DIR }}
-
-    #     PARENT_DIR=$(pwd)
-    #     echo "WORKSPACE_PARENT_DIR=$PARENT_DIR" >> $GITHUB_ENV
-
-    #     mkdir build && cd build
-    #     cmake \
-    #     -D TPL_ENABLE_MPI=OFF \
-    #     -D CMAKE_C_COMPILER=$CC \
-    #     -D TriBITS_ENABLE_Fortran=ON \
-    #     -D TriBITS_ENABLE_TESTS=ON \
-    #     ${{ env.WORKSPACE_PARENT_DIR }}
-
-    #     python setup.py build
-
-    # - name: Run CTest
-    #   run: |
-    #     cd ${{ matrix.config.ctest_build }}
-    #     export LD_LIBRARY_PATH=${{ env.PRESSIO_BUILDS }}/trilinos/install/lib
-    #     ctest -V
