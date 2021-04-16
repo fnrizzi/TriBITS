@@ -71,3 +71,8 @@ jobs:
       run: |
         cd ${{ env.BUILD_DIR }}
         make -j4
+
+    - name: Run CTest
+      run: |
+        cd ${{ env.BUILD_DIR }}
+        ctest -j4
